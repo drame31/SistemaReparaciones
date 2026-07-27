@@ -25,17 +25,41 @@
             <div class="campo">
                 <label for="txtContrasena">Contrasena</label>
                 <asp:TextBox ID="txtContrasena" runat="server" TextMode="Password" MaxLength="50" autocomplete="current-password" />
+                <span id="avisoMayusculas" class="aviso-mayusculas">Tiene las mayusculas activadas (Bloq Mayus)</span>
             </div>
 
             <asp:Button ID="btnEntrar" runat="server" Text="Entrar" CssClass="boton principal" OnClick="btnEntrar_Click" />
 
             <div class="pie-login">
-                Usuarios de prueba:<br />
-                admin / admin123<br />
-                tecnico / tecnico123
+                Usuarios de prueba (haga clic para llenar el formulario):<br />
+                <button type="button" class="enlace-usuario" onclick="llenar('admin', 'admin123');">admin / admin123</button><br />
+                <button type="button" class="enlace-usuario" onclick="llenar('tecnico', 'tecnico123');">tecnico / tecnico123</button>
             </div>
 
         </div>
     </form>
+
+    <script type="text/javascript">
+        function llenar(usuario, clave) {
+            document.getElementById('txtUsuario').value = usuario;
+            document.getElementById('txtContrasena').value = clave;
+            document.getElementById('txtContrasena').focus();
+        }
+
+        // La contrasena va cifrada, asi que una mayuscula de mas la invalida.
+        // Este aviso evita perder tiempo buscando el error en otro lado.
+        (function () {
+            var clave = document.getElementById('txtContrasena');
+            var aviso = document.getElementById('avisoMayusculas');
+
+            function revisar(e) {
+                var activado = e.getModifierState && e.getModifierState('CapsLock');
+                aviso.style.display = activado ? 'block' : 'none';
+            }
+
+            clave.addEventListener('keydown', revisar);
+            clave.addEventListener('keyup', revisar);
+        })();
+    </script>
 </body>
 </html>

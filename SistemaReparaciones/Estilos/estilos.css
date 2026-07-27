@@ -464,7 +464,30 @@ textarea:focus {
     border-top: 1px solid var(--gris-borde);
     font-size: 12px;
     color: var(--gris-texto);
-    line-height: 1.7;
+    line-height: 1.9;
+}
+
+/* Los usuarios de prueba se pueden clicar para no escribirlos a mano */
+.enlace-usuario {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--azul-claro);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.enlace-usuario:hover {
+    color: var(--azul);
+}
+
+.aviso-mayusculas {
+    display: none;
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--amarillo);
 }
 
 /* ---------- Pantallas pequenas ---------- */

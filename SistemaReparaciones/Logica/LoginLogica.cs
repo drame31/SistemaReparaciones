@@ -15,7 +15,10 @@ namespace SistemaReparaciones.Logica
                 throw new ApplicationException("Escriba el usuario y la contrasena.");
             }
 
-            return datos.Validar(nombreUsuario.Trim(), Seguridad.Cifrar(contrasena));
+            // Se le quitan los espacios de los extremos a la contrasena porque al
+            // copiarla y pegarla es facil arrastrar uno sin darse cuenta, y como
+            // va cifrada un solo espacio de mas cambia el hash completo.
+            return datos.Validar(nombreUsuario.Trim(), Seguridad.Cifrar(contrasena.Trim()));
         }
 
         public Resumen ObtenerResumen()
