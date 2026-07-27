@@ -1,0 +1,42 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="SistemaReparaciones.SiteMaster" %>
+
+<!DOCTYPE html>
+<html lang="es">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Taller de Reparaciones</title>
+    <link rel="stylesheet" href="~/Estilos/estilos.css" runat="server" />
+    <asp:ContentPlaceHolder ID="head" runat="server" />
+</head>
+<body>
+    <form id="form1" runat="server">
+
+        <header class="encabezado">
+            <div class="marca">
+                Taller de Reparaciones
+                <span>Control de equipos y servicios</span>
+            </div>
+            <div class="sesion">
+                <asp:Literal ID="litUsuario" runat="server" />
+                <asp:LinkButton ID="btnSalir" runat="server" OnClick="btnSalir_Click">Cerrar sesion</asp:LinkButton>
+            </div>
+        </header>
+
+        <nav class="menu">
+            <a id="navInicio" runat="server" href="~/Default.aspx">Inicio</a>
+            <a id="navEquipos" runat="server" href="~/Equipos.aspx">Equipos</a>
+            <a id="navUsuarios" runat="server" href="~/Usuarios.aspx">Clientes</a>
+            <a id="navTecnicos" runat="server" href="~/Tecnicos.aspx">Tecnicos</a>
+            <a id="navReparaciones" runat="server" href="~/Reparaciones.aspx">Reparaciones</a>
+            <a id="navDetalles" runat="server" href="~/Detalles.aspx">Detalles</a>
+            <a id="navAsignaciones" runat="server" href="~/Asignaciones.aspx">Asignaciones</a>
+        </nav>
+
+        <main class="contenido">
+            <asp:ContentPlaceHolder ID="Contenido" runat="server" />
+        </main>
+
+    </form>
+</body>
+</html>
