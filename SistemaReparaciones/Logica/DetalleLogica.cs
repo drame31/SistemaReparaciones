@@ -16,26 +16,7 @@ namespace SistemaReparaciones.Logica
 
         public List<DetalleReparacion> Buscar(string texto)
         {
-            List<DetalleReparacion> todos = datos.Listar();
-
-            if (string.IsNullOrWhiteSpace(texto))
-            {
-                return todos;
-            }
-
-            texto = texto.Trim().ToLower();
-            List<DetalleReparacion> encontrados = new List<DetalleReparacion>();
-
-            foreach (DetalleReparacion d in todos)
-            {
-                if (d.Descripcion.ToLower().Contains(texto) ||
-                    d.DescripcionEquipo.ToLower().Contains(texto))
-                {
-                    encontrados.Add(d);
-                }
-            }
-
-            return encontrados;
+            return datos.Listar(Filtro.Preparar(texto));
         }
 
         public DetalleReparacion Obtener(int detalleID)

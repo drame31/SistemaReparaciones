@@ -52,6 +52,11 @@ y `sp_ResumenGeneral`, que es el que llena los contadores de la pantalla de inic
 Toda la aplicación trabaja por procedimientos almacenados. No hay una sola
 consulta SQL escrita dentro del código C#.
 
+Los `sp_ListarX` reciben un parámetro `@Busqueda` con lo que el usuario escribió
+en el buscador de la pantalla. Si llega en `NULL` devuelven la tabla completa. El
+filtro se hace ahí y no en C# para no traerse todas las filas y botar la mitad
+después.
+
 Algunas reglas quedaron dentro de los mismos procedimientos, por ejemplo no dejar
 borrar un cliente que todavía tiene equipos registrados, o no repetir el correo
 electrónico de un cliente.
@@ -104,13 +109,33 @@ tener que repetir ese chequeo en cada página.
 - **Reparaciones**, **Detalles**, **Asignaciones** – el resto de las tablas
 
 Todas las pantallas de mantenimiento funcionan igual: arriba el formulario para
-agregar o editar y abajo la tabla con buscador y los botones de editar y eliminar.
+agregar o editar y abajo la tabla con buscador, paginación de 10 filas y los
+botones de editar y eliminar.
+
+## Roles
+
+Hay dos roles y sí cambian lo que se puede hacer:
+
+| | Administrador | Técnico |
+| --- | --- | --- |
+| Equipos, Clientes, Técnicos | agrega, edita y elimina | solo consulta |
+| Reparaciones, Detalles, Asignaciones | agrega, edita y elimina | agrega, edita y elimina |
+
+La idea es que el técnico trabaja las órdenes del taller, que es lo suyo, pero no
+da de alta clientes ni compañeros de trabajo.
+
+Cuando entra un técnico a un mantenimiento que no puede tocar, se le esconde el
+formulario y la columna de acciones, y sale un aviso explicando por qué. Además
+el permiso se vuelve a revisar en el servidor antes de guardar o borrar
+(`PaginaBase.ExigirAdministrador`), porque esconder un botón no impide que
+alguien reenvíe el formulario por su cuenta.
 
 ## Cosas que quedaron pendientes
 
-- Los roles se guardan en la sesión pero todavía no limitan lo que cada uno puede
-  hacer. Un técnico ve lo mismo que un administrador.
-- La búsqueda filtra en memoria después de traer la lista completa. Con pocos
-  registros va bien, pero si la tabla creciera habría que hacer el filtro dentro
-  del procedimiento almacenado.
-- No hay paginación en las tablas.
+- La paginación se hace en la pantalla: el procedimiento almacenado devuelve la
+  lista ya filtrada y el GridView la parte en páginas de 10. Para una tabla de
+  verdad grande habría que paginar dentro del procedimiento con `OFFSET`/`FETCH`
+  y devolver solo la página que se está viendo.
+- Los usuarios que entran al sistema se crean desde el script `03_DatosIniciales.sql`.
+  No hay una pantalla para administrarlos.
+- No hay recuperación de contraseña.

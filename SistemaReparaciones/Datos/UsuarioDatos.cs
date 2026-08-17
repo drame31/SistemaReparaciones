@@ -20,9 +20,19 @@ namespace SistemaReparaciones.Datos
 
         public List<Usuario> Listar()
         {
+            return Listar(null);
+        }
+
+        // El filtro se lo lleva el procedimiento almacenado. Si busqueda
+        // viene en null devuelve la tabla completa.
+        public List<Usuario> Listar(string busqueda)
+        {
             List<Usuario> lista = new List<Usuario>();
 
-            foreach (DataRow fila in Conexion.Consultar("sp_ListarUsuarios").Rows)
+            DataTable tabla = Conexion.Consultar("sp_ListarUsuarios",
+                new SqlParameter("@Busqueda", (object)busqueda ?? DBNull.Value));
+
+            foreach (DataRow fila in tabla.Rows)
             {
                 lista.Add(Mapear(fila));
             }

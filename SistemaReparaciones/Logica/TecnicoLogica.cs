@@ -16,26 +16,7 @@ namespace SistemaReparaciones.Logica
 
         public List<Tecnico> Buscar(string texto)
         {
-            List<Tecnico> todos = datos.Listar();
-
-            if (string.IsNullOrWhiteSpace(texto))
-            {
-                return todos;
-            }
-
-            texto = texto.Trim().ToLower();
-            List<Tecnico> encontrados = new List<Tecnico>();
-
-            foreach (Tecnico t in todos)
-            {
-                if (t.Nombre.ToLower().Contains(texto) ||
-                    t.Especialidad.ToLower().Contains(texto))
-                {
-                    encontrados.Add(t);
-                }
-            }
-
-            return encontrados;
+            return datos.Listar(Filtro.Preparar(texto));
         }
 
         public Tecnico Obtener(int tecnicoID)

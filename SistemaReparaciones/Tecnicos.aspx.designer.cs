@@ -10,6 +10,8 @@ namespace SistemaReparaciones
     public partial class Tecnicos
     {
         protected global::System.Web.UI.WebControls.Label lblMensaje;
+        protected global::System.Web.UI.WebControls.Panel pnlSoloLectura;
+        protected global::System.Web.UI.WebControls.Panel pnlFormulario;
         protected global::System.Web.UI.WebControls.Literal litTituloFormulario;
         protected global::System.Web.UI.WebControls.HiddenField hdnTecnicoID;
         protected global::System.Web.UI.WebControls.TextBox txtNombre;

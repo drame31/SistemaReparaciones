@@ -47,12 +47,31 @@ namespace SistemaReparaciones
 
         private void CargarLista()
         {
-            gvReparaciones.DataSource = logica.Buscar(txtBuscar.Text);
+            List<Reparacion> lista = logica.Buscar(txtBuscar.Text);
+
+            // Si se elimino el ultimo registro de la ultima pagina esa pagina
+            // ya no existe y la tabla saldria vacia, asi que se retrocede.
+            int ultimaPagina = (lista.Count - 1) / gvReparaciones.PageSize;
+
+            if (gvReparaciones.PageIndex > ultimaPagina)
+            {
+                gvReparaciones.PageIndex = ultimaPagina < 0 ? 0 : ultimaPagina;
+            }
+
+            gvReparaciones.DataSource = lista;
             gvReparaciones.DataBind();
         }
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
+            // Una busqueda nueva arranca desde la primera pagina
+            gvReparaciones.PageIndex = 0;
+            CargarLista();
+        }
+
+        protected void gvReparaciones_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvReparaciones.PageIndex = e.NewPageIndex;
             CargarLista();
         }
 

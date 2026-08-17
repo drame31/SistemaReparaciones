@@ -321,6 +321,51 @@ textarea:focus {
     color: var(--gris-texto);
 }
 
+/* ---------- Paginador de las tablas ---------- */
+
+.paginador td {
+    padding: 10px 14px;
+    background-color: #f7f9fa;
+    border-top: 1px solid var(--gris-borde);
+    border-bottom: none;
+}
+
+/* La fila del paginador no se ilumina como las de datos */
+.tabla tr.paginador:hover td {
+    background-color: #f7f9fa;
+}
+
+.paginador table {
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 5px 0;
+}
+
+.paginador a,
+.paginador span {
+    display: inline-block;
+    min-width: 26px;
+    padding: 4px 8px;
+    border: 1px solid var(--gris-borde);
+    border-radius: 3px;
+    text-align: center;
+    font-size: 13px;
+    text-decoration: none;
+    background-color: #fff;
+}
+
+.paginador a:hover {
+    background-color: #eaeff3;
+}
+
+/* La pagina en la que estamos sale como span, no como enlace */
+.paginador span {
+    background-color: var(--azul);
+    border-color: var(--azul);
+    color: #fff;
+    font-weight: 600;
+}
+
 /* ---------- Estados ---------- */
 
 .estado {
@@ -373,6 +418,12 @@ textarea:focus {
     background-color: #fbe9e8;
     border-color: #eec6c3;
     color: var(--rojo);
+}
+
+.mensaje-aviso {
+    background-color: #fdf6e3;
+    border-color: #e8d9ab;
+    color: var(--amarillo);
 }
 
 /* ---------- Tarjetas del inicio ---------- */

@@ -7,7 +7,12 @@
 
     <asp:Label ID="lblMensaje" runat="server" Visible="false" />
 
-    <div class="panel">
+    <asp:Panel ID="pnlSoloLectura" runat="server" CssClass="mensaje mensaje-aviso" Visible="false">
+        Entro como tecnico. Este mantenimiento lo puede consultar, pero agregar,
+        editar o eliminar equipos le corresponde al administrador.
+    </asp:Panel>
+
+    <asp:Panel ID="pnlFormulario" runat="server" CssClass="panel">
         <h2><asp:Literal ID="litTituloFormulario" runat="server" Text="Registrar equipo" /></h2>
         <div class="cuerpo">
 
@@ -42,7 +47,7 @@
             </div>
 
         </div>
-    </div>
+    </asp:Panel>
 
     <div class="panel">
         <h2>Equipos registrados</h2>
@@ -55,6 +60,11 @@
         <asp:GridView ID="gvEquipos" runat="server" AutoGenerateColumns="false"
             CssClass="tabla" GridLines="None" UseAccessibleHeader="true"
             AlternatingRowStyle-CssClass="fila-alterna"
+            AllowPaging="true" PageSize="10"
+            PagerStyle-CssClass="paginador"
+            PagerSettings-Mode="NumericFirstLast"
+            PagerSettings-FirstPageText="Primera" PagerSettings-LastPageText="Ultima"
+            OnPageIndexChanging="gvEquipos_PageIndexChanging"
             OnRowCommand="gvEquipos_RowCommand">
             <Columns>
                 <asp:BoundField DataField="EquipoID" HeaderText="#"

@@ -10,6 +10,8 @@ namespace SistemaReparaciones
     public partial class Equipos
     {
         protected global::System.Web.UI.WebControls.Label lblMensaje;
+        protected global::System.Web.UI.WebControls.Panel pnlSoloLectura;
+        protected global::System.Web.UI.WebControls.Panel pnlFormulario;
         protected global::System.Web.UI.WebControls.Literal litTituloFormulario;
         protected global::System.Web.UI.WebControls.HiddenField hdnEquipoID;
         protected global::System.Web.UI.WebControls.DropDownList ddlTipo;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.UI.WebControls;
 using SistemaReparaciones.Logica;
 using SistemaReparaciones.Modelo;
@@ -35,12 +36,31 @@ namespace SistemaReparaciones
 
         private void CargarLista()
         {
-            gvDetalles.DataSource = logica.Buscar(txtBuscar.Text);
+            List<DetalleReparacion> lista = logica.Buscar(txtBuscar.Text);
+
+            // Si se elimino el ultimo registro de la ultima pagina esa pagina
+            // ya no existe y la tabla saldria vacia, asi que se retrocede.
+            int ultimaPagina = (lista.Count - 1) / gvDetalles.PageSize;
+
+            if (gvDetalles.PageIndex > ultimaPagina)
+            {
+                gvDetalles.PageIndex = ultimaPagina < 0 ? 0 : ultimaPagina;
+            }
+
+            gvDetalles.DataSource = lista;
             gvDetalles.DataBind();
         }
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
+            // Una busqueda nueva arranca desde la primera pagina
+            gvDetalles.PageIndex = 0;
+            CargarLista();
+        }
+
+        protected void gvDetalles_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvDetalles.PageIndex = e.NewPageIndex;
             CargarLista();
         }
 

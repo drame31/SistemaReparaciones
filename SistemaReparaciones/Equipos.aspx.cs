@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.UI.WebControls;
 using SistemaReparaciones.Logica;
 using SistemaReparaciones.Modelo;
@@ -12,11 +13,28 @@ namespace SistemaReparaciones
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            AplicarPermisos();
+
             if (!IsPostBack)
             {
                 CargarClientes();
                 CargarLista();
             }
+        }
+
+        // El tecnico puede consultar el listado pero no modificarlo. Se corre
+        // en cada carga, tambien en las postbacks, para que los botones no
+        // vuelvan a aparecer despues de buscar o cambiar de pagina.
+        private void AplicarPermisos()
+        {
+            if (EsAdministrador)
+            {
+                return;
+            }
+
+            pnlFormulario.Visible = false;
+            pnlSoloLectura.Visible = true;
+            gvEquipos.Columns[gvEquipos.Columns.Count - 1].Visible = false;
         }
 
         private void CargarClientes()
@@ -31,12 +49,31 @@ namespace SistemaReparaciones
 
         private void CargarLista()
         {
-            gvEquipos.DataSource = logica.Buscar(txtBuscar.Text);
+            List<Equipo> lista = logica.Buscar(txtBuscar.Text);
+
+            // Si se elimino el ultimo registro de la ultima pagina esa pagina
+            // ya no existe y la tabla saldria vacia, asi que se retrocede.
+            int ultimaPagina = (lista.Count - 1) / gvEquipos.PageSize;
+
+            if (gvEquipos.PageIndex > ultimaPagina)
+            {
+                gvEquipos.PageIndex = ultimaPagina < 0 ? 0 : ultimaPagina;
+            }
+
+            gvEquipos.DataSource = lista;
             gvEquipos.DataBind();
         }
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
+            // Una busqueda nueva arranca desde la primera pagina
+            gvEquipos.PageIndex = 0;
+            CargarLista();
+        }
+
+        protected void gvEquipos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvEquipos.PageIndex = e.NewPageIndex;
             CargarLista();
         }
 
@@ -44,6 +81,8 @@ namespace SistemaReparaciones
         {
             try
             {
+                ExigirAdministrador();
+
                 Equipo eq = new Equipo();
                 eq.EquipoID = int.Parse(hdnEquipoID.Value);
                 eq.TipoEquipo = ddlTipo.SelectedValue;
@@ -73,6 +112,12 @@ namespace SistemaReparaciones
         {
             if (e.CommandName != "Editar" && e.CommandName != "Borrar")
             {
+                return;
+            }
+
+            if (!EsAdministrador)
+            {
+                Mostrar(SinPermiso, false);
                 return;
             }
 

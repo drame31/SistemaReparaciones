@@ -51,6 +51,11 @@
         <asp:GridView ID="gvDetalles" runat="server" AutoGenerateColumns="false"
             CssClass="tabla" GridLines="None" UseAccessibleHeader="true"
             AlternatingRowStyle-CssClass="fila-alterna"
+            AllowPaging="true" PageSize="10"
+            PagerStyle-CssClass="paginador"
+            PagerSettings-Mode="NumericFirstLast"
+            PagerSettings-FirstPageText="Primera" PagerSettings-LastPageText="Ultima"
+            OnPageIndexChanging="gvDetalles_PageIndexChanging"
             OnRowCommand="gvDetalles_RowCommand">
             <Columns>
                 <asp:BoundField DataField="DetalleID" HeaderText="#"

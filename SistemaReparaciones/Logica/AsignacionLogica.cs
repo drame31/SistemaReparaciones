@@ -16,26 +16,7 @@ namespace SistemaReparaciones.Logica
 
         public List<Asignacion> Buscar(string texto)
         {
-            List<Asignacion> todas = datos.Listar();
-
-            if (string.IsNullOrWhiteSpace(texto))
-            {
-                return todas;
-            }
-
-            texto = texto.Trim().ToLower();
-            List<Asignacion> encontradas = new List<Asignacion>();
-
-            foreach (Asignacion a in todas)
-            {
-                if (a.NombreTecnico.ToLower().Contains(texto) ||
-                    a.DescripcionEquipo.ToLower().Contains(texto))
-                {
-                    encontradas.Add(a);
-                }
-            }
-
-            return encontradas;
+            return datos.Listar(Filtro.Preparar(texto));
         }
 
         public Asignacion Obtener(int asignacionID)

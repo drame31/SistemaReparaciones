@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.UI.WebControls;
 using SistemaReparaciones.Logica;
 using SistemaReparaciones.Modelo;
@@ -11,20 +12,56 @@ namespace SistemaReparaciones
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            AplicarPermisos();
+
             if (!IsPostBack)
             {
                 CargarLista();
             }
         }
 
+        // El tecnico puede consultar el listado pero no modificarlo. Se corre
+        // en cada carga, tambien en las postbacks, para que los botones no
+        // vuelvan a aparecer despues de buscar o cambiar de pagina.
+        private void AplicarPermisos()
+        {
+            if (EsAdministrador)
+            {
+                return;
+            }
+
+            pnlFormulario.Visible = false;
+            pnlSoloLectura.Visible = true;
+            gvTecnicos.Columns[gvTecnicos.Columns.Count - 1].Visible = false;
+        }
+
         private void CargarLista()
         {
-            gvTecnicos.DataSource = logica.Buscar(txtBuscar.Text);
+            List<Tecnico> lista = logica.Buscar(txtBuscar.Text);
+
+            // Si se elimino el ultimo registro de la ultima pagina esa pagina
+            // ya no existe y la tabla saldria vacia, asi que se retrocede.
+            int ultimaPagina = (lista.Count - 1) / gvTecnicos.PageSize;
+
+            if (gvTecnicos.PageIndex > ultimaPagina)
+            {
+                gvTecnicos.PageIndex = ultimaPagina < 0 ? 0 : ultimaPagina;
+            }
+
+            gvTecnicos.DataSource = lista;
             gvTecnicos.DataBind();
         }
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
+            // Una busqueda nueva arranca desde la primera pagina
+            gvTecnicos.PageIndex = 0;
+            CargarLista();
+        }
+
+        protected void gvTecnicos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvTecnicos.PageIndex = e.NewPageIndex;
             CargarLista();
         }
 
@@ -32,6 +69,8 @@ namespace SistemaReparaciones
         {
             try
             {
+                ExigirAdministrador();
+
                 Tecnico t = new Tecnico();
                 t.TecnicoID = int.Parse(hdnTecnicoID.Value);
                 t.Nombre = txtNombre.Text;
@@ -60,6 +99,12 @@ namespace SistemaReparaciones
         {
             if (e.CommandName != "Editar" && e.CommandName != "Borrar")
             {
+                return;
+            }
+
+            if (!EsAdministrador)
+            {
+                Mostrar(SinPermiso, false);
                 return;
             }
 

@@ -22,27 +22,7 @@ namespace SistemaReparaciones.Logica
 
         public List<Reparacion> Buscar(string texto)
         {
-            List<Reparacion> todas = datos.Listar();
-
-            if (string.IsNullOrWhiteSpace(texto))
-            {
-                return todas;
-            }
-
-            texto = texto.Trim().ToLower();
-            List<Reparacion> encontradas = new List<Reparacion>();
-
-            foreach (Reparacion r in todas)
-            {
-                if (r.DescripcionEquipo.ToLower().Contains(texto) ||
-                    r.NombreUsuario.ToLower().Contains(texto) ||
-                    r.Estado.ToLower().Contains(texto))
-                {
-                    encontradas.Add(r);
-                }
-            }
-
-            return encontradas;
+            return datos.Listar(Filtro.Preparar(texto));
         }
 
         public Reparacion Obtener(int reparacionID)

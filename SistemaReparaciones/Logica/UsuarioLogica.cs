@@ -18,27 +18,7 @@ namespace SistemaReparaciones.Logica
         // Filtro de la caja de busqueda de la pantalla
         public List<Usuario> Buscar(string texto)
         {
-            List<Usuario> todos = datos.Listar();
-
-            if (string.IsNullOrWhiteSpace(texto))
-            {
-                return todos;
-            }
-
-            texto = texto.Trim().ToLower();
-            List<Usuario> encontrados = new List<Usuario>();
-
-            foreach (Usuario u in todos)
-            {
-                if (u.Nombre.ToLower().Contains(texto) ||
-                    u.CorreoElectronico.ToLower().Contains(texto) ||
-                    u.Telefono.ToLower().Contains(texto))
-                {
-                    encontrados.Add(u);
-                }
-            }
-
-            return encontrados;
+            return datos.Listar(Filtro.Preparar(texto));
         }
 
         public Usuario Obtener(int usuarioID)

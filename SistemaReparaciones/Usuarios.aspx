@@ -7,7 +7,12 @@
 
     <asp:Label ID="lblMensaje" runat="server" Visible="false" />
 
-    <div class="panel">
+    <asp:Panel ID="pnlSoloLectura" runat="server" CssClass="mensaje mensaje-aviso" Visible="false">
+        Entro como tecnico. Este mantenimiento lo puede consultar, pero agregar,
+        editar o eliminar clientes le corresponde al administrador.
+    </asp:Panel>
+
+    <asp:Panel ID="pnlFormulario" runat="server" CssClass="panel">
         <h2><asp:Literal ID="litTituloFormulario" runat="server" Text="Agregar cliente" /></h2>
         <div class="cuerpo">
 
@@ -34,7 +39,7 @@
             </div>
 
         </div>
-    </div>
+    </asp:Panel>
 
     <div class="panel">
         <h2>Clientes registrados</h2>
@@ -47,6 +52,11 @@
         <asp:GridView ID="gvUsuarios" runat="server" AutoGenerateColumns="false"
             CssClass="tabla" GridLines="None" UseAccessibleHeader="true"
             AlternatingRowStyle-CssClass="fila-alterna"
+            AllowPaging="true" PageSize="10"
+            PagerStyle-CssClass="paginador"
+            PagerSettings-Mode="NumericFirstLast"
+            PagerSettings-FirstPageText="Primera" PagerSettings-LastPageText="Ultima"
+            OnPageIndexChanging="gvUsuarios_PageIndexChanging"
             OnRowCommand="gvUsuarios_RowCommand">
             <Columns>
                 <asp:BoundField DataField="UsuarioID" HeaderText="#"

@@ -92,6 +92,7 @@
     <Compile Include="Datos\AsignacionDatos.cs" />
     <Compile Include="Datos\LoginDatos.cs" />
     <Compile Include="Logica\Seguridad.cs" />
+    <Compile Include="Logica\Filtro.cs" />
     <Compile Include="Logica\LoginLogica.cs" />
     <Compile Include="Logica\UsuarioLogica.cs" />
     <Compile Include="Logica\EquipoLogica.cs" />

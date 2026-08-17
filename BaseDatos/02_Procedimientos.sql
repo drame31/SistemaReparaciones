@@ -6,6 +6,11 @@
     actualizar, eliminar) mas el de validacion del login.
     Toda la aplicacion trabaja unicamente con estos procedimientos,
     no hay SQL escrito dentro del codigo C#.
+
+    Los procedimientos de listar reciben @Busqueda, que es lo que el
+    usuario escribio en el buscador de la pantalla. Si llega NULL se
+    devuelve la tabla completa. El filtro se hace aqui y no en C# para
+    no traerse todas las filas y descartarlas despues.
 */
 
 USE TallerReparaciones;
@@ -16,12 +21,17 @@ GO
    ============================================================ */
 
 CREATE OR ALTER PROCEDURE sp_ListarUsuarios
+    @Busqueda VARCHAR(150) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
 
     SELECT UsuarioID, Nombre, CorreoElectronico, Telefono
     FROM Usuarios
+    WHERE @Busqueda IS NULL
+       OR Nombre            LIKE '%' + @Busqueda + '%'
+       OR CorreoElectronico LIKE '%' + @Busqueda + '%'
+       OR Telefono          LIKE '%' + @Busqueda + '%'
     ORDER BY Nombre;
 END
 GO
@@ -106,6 +116,7 @@ GO
    ============================================================ */
 
 CREATE OR ALTER PROCEDURE sp_ListarEquipos
+    @Busqueda VARCHAR(150) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -117,6 +128,10 @@ BEGIN
            u.Nombre AS NombreUsuario
     FROM Equipos e
          INNER JOIN Usuarios u ON u.UsuarioID = e.UsuarioID
+    WHERE @Busqueda IS NULL
+       OR e.TipoEquipo LIKE '%' + @Busqueda + '%'
+       OR e.Modelo     LIKE '%' + @Busqueda + '%'
+       OR u.Nombre     LIKE '%' + @Busqueda + '%'
     ORDER BY e.EquipoID DESC;
 END
 GO
@@ -192,12 +207,16 @@ GO
    ============================================================ */
 
 CREATE OR ALTER PROCEDURE sp_ListarTecnicos
+    @Busqueda VARCHAR(150) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
 
     SELECT TecnicoID, Nombre, Especialidad
     FROM Tecnicos
+    WHERE @Busqueda IS NULL
+       OR Nombre       LIKE '%' + @Busqueda + '%'
+       OR Especialidad LIKE '%' + @Busqueda + '%'
     ORDER BY Nombre;
 END
 GO
@@ -265,6 +284,7 @@ GO
    ============================================================ */
 
 CREATE OR ALTER PROCEDURE sp_ListarReparaciones
+    @Busqueda VARCHAR(150) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -278,6 +298,10 @@ BEGIN
     FROM Reparaciones r
          INNER JOIN Equipos  e ON e.EquipoID  = r.EquipoID
          INNER JOIN Usuarios u ON u.UsuarioID = e.UsuarioID
+    WHERE @Busqueda IS NULL
+       OR e.TipoEquipo + ' ' + e.Modelo LIKE '%' + @Busqueda + '%'
+       OR u.Nombre                      LIKE '%' + @Busqueda + '%'
+       OR r.Estado                      LIKE '%' + @Busqueda + '%'
     ORDER BY r.FechaSolicitud DESC, r.ReparacionID DESC;
 END
 GO
@@ -356,6 +380,7 @@ GO
    ============================================================ */
 
 CREATE OR ALTER PROCEDURE sp_ListarDetalles
+    @Busqueda VARCHAR(150) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -369,6 +394,9 @@ BEGIN
     FROM DetallesReparacion d
          INNER JOIN Reparaciones r ON r.ReparacionID = d.ReparacionID
          INNER JOIN Equipos      e ON e.EquipoID     = r.EquipoID
+    WHERE @Busqueda IS NULL
+       OR d.Descripcion                 LIKE '%' + @Busqueda + '%'
+       OR e.TipoEquipo + ' ' + e.Modelo LIKE '%' + @Busqueda + '%'
     ORDER BY d.DetalleID DESC;
 END
 GO
@@ -443,6 +471,7 @@ GO
    ============================================================ */
 
 CREATE OR ALTER PROCEDURE sp_ListarAsignaciones
+    @Busqueda VARCHAR(150) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -457,6 +486,9 @@ BEGIN
          INNER JOIN Tecnicos     t ON t.TecnicoID    = a.TecnicoID
          INNER JOIN Reparaciones r ON r.ReparacionID = a.ReparacionID
          INNER JOIN Equipos      e ON e.EquipoID     = r.EquipoID
+    WHERE @Busqueda IS NULL
+       OR t.Nombre                      LIKE '%' + @Busqueda + '%'
+       OR e.TipoEquipo + ' ' + e.Modelo LIKE '%' + @Busqueda + '%'
     ORDER BY a.FechaAsignacion DESC, a.AsignacionID DESC;
 END
 GO

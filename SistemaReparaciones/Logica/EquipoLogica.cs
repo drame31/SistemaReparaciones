@@ -16,27 +16,7 @@ namespace SistemaReparaciones.Logica
 
         public List<Equipo> Buscar(string texto)
         {
-            List<Equipo> todos = datos.Listar();
-
-            if (string.IsNullOrWhiteSpace(texto))
-            {
-                return todos;
-            }
-
-            texto = texto.Trim().ToLower();
-            List<Equipo> encontrados = new List<Equipo>();
-
-            foreach (Equipo e in todos)
-            {
-                if (e.TipoEquipo.ToLower().Contains(texto) ||
-                    e.Modelo.ToLower().Contains(texto) ||
-                    e.NombreUsuario.ToLower().Contains(texto))
-                {
-                    encontrados.Add(e);
-                }
-            }
-
-            return encontrados;
+            return datos.Listar(Filtro.Preparar(texto));
         }
 
         public Equipo Obtener(int equipoID)

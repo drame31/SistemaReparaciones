@@ -47,6 +47,11 @@
         <asp:GridView ID="gvAsignaciones" runat="server" AutoGenerateColumns="false"
             CssClass="tabla" GridLines="None" UseAccessibleHeader="true"
             AlternatingRowStyle-CssClass="fila-alterna"
+            AllowPaging="true" PageSize="10"
+            PagerStyle-CssClass="paginador"
+            PagerSettings-Mode="NumericFirstLast"
+            PagerSettings-FirstPageText="Primera" PagerSettings-LastPageText="Ultima"
+            OnPageIndexChanging="gvAsignaciones_PageIndexChanging"
             OnRowCommand="gvAsignaciones_RowCommand">
             <Columns>
                 <asp:BoundField DataField="AsignacionID" HeaderText="#"
